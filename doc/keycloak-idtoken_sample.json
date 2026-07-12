@@ -1,0 +1,21 @@
+{
+  "exp" : 1782128996,
+  "iat" : 1782128696,
+  "auth_time" : 1782128696,
+  "jti" : "5a594613-b7ec-dbbd-8091-d4cb0ebbf9e4",
+  "iss" : "http://localhost:8080/realms/sadad",
+  "aud" : "sadad_api-gateway",
+  "sub" : "a6d4f81c-d9b2-4da4-9de4-b8fee866a1ee",
+  "typ" : "ID",
+  "azp" : "sadad_api-gateway",
+  "nonce" : "tPq9s04g0Hl6x97PCUndLlgSqFrQpHORm9EX1CgXtrE",
+  "sid" : "thS2DtbD6hUtmJUFQMRpLVHQ",
+  "at_hash" : "ZN0LQNPbINQkG58jvdBeRA",
+  "acr" : "1",
+  "email_verified" : false,
+  "name" : "Johny Jack Dow Doe",
+  "preferred_username" : "test",
+  "given_name" : "Johny Jack",
+  "family_name" : "Dow Doe",
+  "email" : "teste@gmail.com"
+}

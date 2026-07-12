@@ -1,0 +1,8 @@
+gateway.mocked.routes:
+  - id: first-wiremock
+    uri: http://localhost:7878/
+    predicates:
+      - Path=/w1/**
+    filters:
+        - StripPrefix=1  # Strips the first path segment (/w1/)
+    order: 0

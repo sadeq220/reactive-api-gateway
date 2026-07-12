@@ -1,0 +1,15 @@
+{
+  "priority": 10,
+  "request": {
+    "method": "ANY",
+    "urlPattern": ".*"
+  },
+  "response": {
+    "status": 200,
+    "fixedDelayMilliseconds": 2000,
+    "body": "{\"status\": \"delayed response\"}",
+    "headers": {
+      "Content-Type": "text/plain"
+    }
+  }
+}

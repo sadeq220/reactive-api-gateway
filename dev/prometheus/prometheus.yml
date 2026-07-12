@@ -1,0 +1,12 @@
+global:
+  scrape_interval: 15s #how often to fetch metrics
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['172.19.0.1:7979']

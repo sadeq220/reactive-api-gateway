@@ -1,0 +1,8 @@
+gateway.routes:
+  - id: second-wiremock
+    uri: http://localhost:7676/
+    predicates:
+      - Path=/w2/**
+    filters:
+      - StripPrefix=1  # Strips the first path segment (/w2/)
+    order: 0

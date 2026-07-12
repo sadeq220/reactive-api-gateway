@@ -1,0 +1,29 @@
+{
+  "exp" : 1782128996,
+  "iat" : 1782128696,
+  "auth_time" : 1782128696,
+  "jti" : "onrtac:38f626a2-a1d7-39ed-b305-f9bfb78c2e17",
+  "iss" : "http://localhost:8080/realms/sadad",
+  "aud" : "account",
+  "sub" : "a6d4f81c-d9b2-4da4-9de4-b8fee866a1ee",
+  "typ" : "Bearer",
+  "azp" : "sadad_api-gateway",
+  "sid" : "thS2DtbD6hUtmJUFQMRpLVHQ",
+  "acr" : "1",
+  "allowed-origins" : [ "" ],
+  "realm_access" : {
+    "roles" : [ "default-roles-sadad", "offline_access", "uma_authorization" ]
+  },
+  "resource_access" : {
+    "account" : {
+      "roles" : [ "manage-account", "manage-account-links", "view-profile" ]
+    }
+  },
+  "scope" : "openid profile email",
+  "email_verified" : false,
+  "name" : "Johny Jack Dow Doe",
+  "preferred_username" : "test",
+  "given_name" : "Johny Jack",
+  "family_name" : "Dow Doe",
+  "email" : "teste@gmail.com"
+}
