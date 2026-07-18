@@ -19,6 +19,7 @@ Spring Webflux register observation beans in `WebFluxObservationAutoConfiguratio
 *DefaultServerRequestObservationConvention* works with **ServerRequestObservationContext** object that is in the Exchange attributes.   
 
 Spring Cloud Gateway registers **spring_cloud_gateway_requests_seconds_sum** metrics.    
+set *spring.cloud.gateway.server.webflux.metrics.path-tags.enabled* property to add **path** tag to the above metrics.    
 
 `Low cardinality values`: are for data with a small, bounded set of possible values. They are added to both metrics and traces.
 `High cardinality values`: are for data with a large or unbounded set of possible values.    
