@@ -12,15 +12,23 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class GatewayMetricTagsFilter implements GlobalFilter, Ordered {
+    private final CustomMetrics customMetrics;
+
+    public GatewayMetricTagsFilter(CustomMetrics customMetrics) {
+        this.customMetrics = customMetrics;
+    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-            Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
-            if (route != null) { // populate uri tag
+            customMetrics.recordOnCommit(exchange);
+            // populate uri tag
+            /*
+             * request-path may contain path-variable it can bloat the Prometheus with so many time-series
                 ServerRequestObservationContext.findCurrent(exchange.getAttributes())
                         .ifPresent(context -> context.setPathPattern(exchange.getRequest().getPath().toString()));
-            }
+             *
+             */
         }));
     }
 
