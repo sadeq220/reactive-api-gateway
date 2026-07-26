@@ -12,6 +12,17 @@ public interface RouteDefinitionLocator {
 	Flux<RouteDefinition> getRouteDefinitions();
 }
 ```
+### Micrometer Meter
+A Meter is the interface for collecting a set of measurements (which we individually call metrics) about your application.     
+Micrometer supports a set of Meter primitives, including `Timer`, `Counter`, `Gauge`, `DistributionSummary`, `LongTaskTimer`, `FunctionCounter`, `FunctionTimer`, and `TimeGauge`.    
+Different meter types result in a different number of time series metrics.    
+For example, while there is a single metric that represents a Gauge,    
+a Timer(summary metric type) measures both the count of timed events and the total time of all timed events.   
+
+Meters in Micrometer are created from and held in a `MeterRegistry`.     
+Each supported **monitoring system** has an implementation of MeterRegistry.    
+How a registry is created varies for each implementation.    
+
 
 ### Metrics
 Spring Webflux register observation beans in `WebFluxObservationAutoConfiguration` class and register bean 
@@ -28,3 +39,4 @@ They are added only to traces, logs, and other systems designed to handle high-c
 
 ### References
 - [Spring Cloud Gateway doc](https://docs.spring.io/spring-cloud-gateway/reference/spring-cloud-gateway-server-webflux/)
+- [Micrometer Meter](https://docs.micrometer.io/micrometer/reference/concepts/meters.html)
