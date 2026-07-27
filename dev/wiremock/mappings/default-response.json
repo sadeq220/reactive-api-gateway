@@ -5,7 +5,7 @@
     "urlPattern": ".*"
   },
   "response": {
-    "status": 200,
+    "status": 400,
     "fixedDelayMilliseconds": 2000,
     "body": "{\"status\": \"delayed response\"}",
     "headers": {

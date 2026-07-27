@@ -41,6 +41,7 @@ public class CustomMetrics {
         /*
          * Micrometer deduplicates by name+tags internally,
          * so calling this on every request is safe and cheap; it won't create duplicate counters for the same tag combination.
+         * The lookup cost is just a single hash lookup, so it is acceptable for most use cases.
          */
         Counter.builder("api.gateway.routed.error")
                 .description("counts all routed requests with 4xx or 5xx response")
