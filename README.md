@@ -39,6 +39,36 @@ set *spring.cloud.gateway.server.webflux.metrics.path-tags.enabled* property to 
 `High cardinality values`: are for data with a large or unbounded set of possible values.    
 They are added only to traces, logs, and other systems designed to handle high-cardinality data, but crucially, not to metrics.    
 
+### Micrometer Tracing
+Micrometer Tracing Library is the successor to the **Spring Cloud Sleuth**.    
+Micrometer Tracing is a facade (like Micrometer itself, but for traces)    
+it lets you write vendor-neutral tracing code, then plug in either bridge:    
+- micrometer-tracing-bridge-brave:  uses Brave (Zipkin's tracer)
+- micrometer-tracing-bridge-otel: uses the OpenTelemetry Java SDK
+
+You need to understand the following definitions for distributed tracing:   
+- Span: The basic unit of work. For example, sending an RPC is a new span
+- Trace: A set of spans forming a tree-like structure.
+- Annotation/Event: Used to record the existence of an event in time.
+- Tracer: A library that handles the lifecycle of a span.
+
+On the contrary to Metrics, spans should only be pushed to a tracing backend(e.g. Zipkin, Jaeger)    
+
+**context propagation**:    
+With context propagation, signals (traces, metrics, and logs) can be correlated with each other.     
+Propagation is the mechanism that moves context between services and processes.    
+Propagation is usually handled by *instrumentation libraries* and is transparent to the user.    
+**Example**:    
+The context (here: Trace ID and Span ID as “Parent ID”) is propagated using     
+the `traceparent` header as it is defined in the W3C TraceContext specification.
+
+```
+traceparent: <version>-<trace-id>-<parent-id>-<trace-flags>
+#e.g.
+traceparent: 00-a0892f3577b34da6a3ce929d0e0e4736-f03067aa0ba902b7-01
+```
+
 ### References
 - [Spring Cloud Gateway doc](https://docs.spring.io/spring-cloud-gateway/reference/spring-cloud-gateway-server-webflux/)
 - [Micrometer Meter](https://docs.micrometer.io/micrometer/reference/concepts/meters.html)
+- [Micrometer Tracing](https://docs.micrometer.io/tracing/reference/glossary.html)
