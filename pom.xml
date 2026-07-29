@@ -52,9 +52,22 @@
 			<artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
 		</dependency>
 		<!-- Micrometer Tracing using OTeL bridge-->
+		<!-- OpenTelemetry API and components to export Micrometer signals via OTLP -->
+		<!-- registers OtlpMeterRegistry -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-opentelemetry</artifactId>
+			<exclusions>
+				<!-- since we use Prometheus meter registry -->
+				<exclusion>
+					<groupId>io.micrometer</groupId>
+					<artifactId>micrometer-registry-otlp</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-exporter-zipkin</artifactId>
 		</dependency>
 
 <!-- protobuf-based(OTeL schema) metrics, push-based monitoring systems-->
@@ -63,6 +76,7 @@
 <!--			<artifactId>micrometer-registry-otlp</artifactId>-->
 <!--			<scope>runtime</scope>-->
 <!--		</dependency>-->
+		<!-- registers PrometheusMeterRegistry -->
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>

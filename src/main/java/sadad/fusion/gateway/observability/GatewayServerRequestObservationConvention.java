@@ -1,13 +1,10 @@
-package sadad.fusion.gateway.instrumenting;
+package sadad.fusion.gateway.observability;
 
 import io.micrometer.common.KeyValue;
 import io.micrometer.common.KeyValues;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.observation.DefaultServerRequestObservationConvention;
 import org.springframework.http.server.reactive.observation.ServerRequestObservationContext;
-import org.springframework.stereotype.Component;
-
-import java.util.Objects;
 
 /**
  * To add custom Tags to Metrics

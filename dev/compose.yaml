@@ -57,6 +57,32 @@ services:
       - '--storage.tsdb.path=/prometheus'
     restart: unless-stopped
 
+  zipkin:
+    image: openzipkin/zipkin:3-amd64
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    environment:
+      # STORAGE_TYPE=mem is actually the default, but set explicitly for clarity.
+      # Traces live only in the container's memory and are lost on restart —
+      # fine for local dev/testing, not for production.
+      - STORAGE_TYPE=mem
+      - JAVA_OPTS=-Xms512m -Xmx512m
+    restart: unless-stopped
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+    ports:
+      - "4317:4317"   # OTLP gRPC — point your Spring app here
+      - "4318:4318"   # OTLP HTTP — or here, if using HTTP transport
+    depends_on:
+      - zipkin
+    restart: unless-stopped
+
 volumes:
   postgres:
   prometheus_data:

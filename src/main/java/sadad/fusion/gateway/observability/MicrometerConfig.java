@@ -1,4 +1,4 @@
-package sadad.fusion.gateway.instrumenting;
+package sadad.fusion.gateway.observability;
 
 import io.micrometer.core.instrument.Tags;
 import org.springframework.cloud.gateway.support.tagsprovider.GatewayTagsProvider;

@@ -46,6 +46,9 @@ it lets you write vendor-neutral tracing code, then plug in either bridge:
 - micrometer-tracing-bridge-brave:  uses Brave (Zipkin's tracer)
 - micrometer-tracing-bridge-otel: uses the OpenTelemetry Java SDK
 
+> [!Important]
+> Remember to pick only one bridge. You should not have two bridges on the classpath.
+
 You need to understand the following definitions for distributed tracing:   
 - Span: The basic unit of work. For example, sending an RPC is a new span
 - Trace: A set of spans forming a tree-like structure.
@@ -53,6 +56,24 @@ You need to understand the following definitions for distributed tracing:
 - Tracer: A library that handles the lifecycle of a span.
 
 On the contrary to Metrics, spans should only be pushed to a tracing backend(e.g. Zipkin, Jaeger)    
+
+`spring-boot-starter-opentelemetry` library is the best way to instrument Spring-boot app. here is how:    
+it registers OtlpMeterRegistry bean for Meter registration.    
+> io.micrometer:micrometer-registry-otlp, is already included in the spring-boot-starter-opentelemetry.    
+> With that dependency in place, Micrometer exports metrics in OTLP format to the backend at http://localhost:4318/v1/metrics.    
+> To customize the location to which metrics are exported, set the management.otlp.metrics.export.url
+
+it also brings micrometer-tracing-bridge-otel to manage span lifecycles with opentelemetry API and export it using OTLP   
+> The Spring projects use the Micrometer Observation API to create observations.     
+> An observation is an interesting concept in Micrometer because     
+> it can be translated into a metric and a trace.
+> To enable it in your application, you have to set the management.opentelemetry.tracing.export.otlp.endpoint property.
+
+
+
+> Spring Boot also supports sending logs via OTLP to an OpenTelemetry-capable backend,   
+> but it doesn't install log appenders into Logback and Log4j2 out of the box.   
+> This may change in the future   
 
 **context propagation**:    
 With context propagation, signals (traces, metrics, and logs) can be correlated with each other.     
@@ -72,3 +93,4 @@ traceparent: 00-a0892f3577b34da6a3ce929d0e0e4736-f03067aa0ba902b7-01
 - [Spring Cloud Gateway doc](https://docs.spring.io/spring-cloud-gateway/reference/spring-cloud-gateway-server-webflux/)
 - [Micrometer Meter](https://docs.micrometer.io/micrometer/reference/concepts/meters.html)
 - [Micrometer Tracing](https://docs.micrometer.io/tracing/reference/glossary.html)
+- [Spring blog opentelemetry](https://spring.io/blog/2025/11/18/opentelemetry-with-spring-boot)

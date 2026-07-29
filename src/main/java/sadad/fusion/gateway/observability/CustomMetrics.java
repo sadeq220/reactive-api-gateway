@@ -1,4 +1,4 @@
-package sadad.fusion.gateway.instrumenting;
+package sadad.fusion.gateway.observability;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
