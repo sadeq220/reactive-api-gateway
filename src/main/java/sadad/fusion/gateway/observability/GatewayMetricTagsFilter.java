@@ -1,5 +1,7 @@
 package sadad.fusion.gateway.observability;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -9,7 +11,9 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class GatewayMetricTagsFilter implements GlobalFilter, Ordered {
+
     private final CustomMetrics customMetrics;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public GatewayMetricTagsFilter(CustomMetrics customMetrics) {
         this.customMetrics = customMetrics;

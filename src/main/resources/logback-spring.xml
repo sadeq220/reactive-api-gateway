@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Pulls in Spring Boot's standard property defaults (LOG_FILE, LOG_PATH, colors, etc.) -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <springProperty name="SPRING_APPLICATION_NAME" source="spring.application.name" />
+
+    <!-- Override Spring Boot's default console pattern to inject traceId/spanId from MDC.
+         Micrometer Tracing (via the OTel bridge) populates these MDC keys automatically
+         for every log line emitted while a span is active. The ":-" fallback keeps the
+         pattern from printing the literal string "null" for log lines with no active span
+         (e.g. app startup, background jobs outside a traced request). -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%5p) %clr([${SPRING_APPLICATION_NAME:-},%X{traceId:-},%X{spanId:-}]){yellow} %clr(%-40.40logger{39}){cyan} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <!-- Same idea for file output, minus the ANSI color codes -->
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [${SPRING_APPLICATION_NAME:-},%X{traceId:-},%X{spanId:-}] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <!-- Spring Boot's pre-built appenders, now picking up the overridden patterns above -->
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <!-- Uncomment to also write to a file (requires logging.file.name or
+             logging.file.path set in application.properties, per Spring Boot conventions) -->
+        <!-- <appender-ref ref="FILE"/> -->
+    </root>
+
+</configuration>

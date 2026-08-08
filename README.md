@@ -69,7 +69,39 @@ it also brings micrometer-tracing-bridge-otel to manage span lifecycles with ope
 > it can be translated into a metric and a trace.
 > To enable it in your application, you have to set the management.opentelemetry.tracing.export.otlp.endpoint property.
 
+The Micrometer Observation object(from io.micrometer.observation) is Micrometer's unified instrumentation API,   
+introduced to replace instrumenting metrics and traces separately.     
+The idea: you instrument your code once by wrapping it in an Observation, and that single instrumentation point can simultaneously produce:    
+- A metric (via a Timer/LongTaskTimer — e.g. http.server.requests)
+- A trace span (via the tracing bridge — e.g. what shows up in Zipkin)
+- Log correlation (MDC population)
+- Anything else a custom ObservationHandler wants to do with it (custom logging, security context propagation, etc.)
 
+How MicroMeter works:   
+1. WebFilter (or ServerHttpObservationFilter/WebHttpHandlerBuilder instrumentation) creates an Observation via ObservationRegistry, and calls .start()
+2. start() fans out to every registered ObservationHandler whose supportsContext() matches — including DefaultTracingObservationHandler,    
+   which creates a real Span via the Tracer bean and stashes it in the Observation.Context
+3. The Observation (or a reference sufficient to reconstruct "current") gets placed into Reactor Context for the reactive chain to carry across thread hops
+   On each signal (via .tap() or the automatic propagation hook), the current-observation pointer is restored into ThreadLocal on whichever thread is executing, openScope() fires, onScopeOpened() runs on every matching handler, and MDC gets populated for that thread, for that signal
+4. When the chain completes, stop() fires, fanning out onStop() to every handler — ending the span, recording the timer/metric, and so on
+
+
+**TracingContext** object is also in Observation Object. and it includes traceId and spanId and parentSpanId.    
+Spring Webflux put Observation Object in reactor Context(from `reactor.util.context.Context`)    
+```
+Mono.deferContextual(Mono::just)
+                    .cast(Context.class)
+                    .filter(context -> {
+                        return context.hasKey(ObservationThreadLocalAccessor.KEY);
+                        })
+                    .map(context -> {
+                        Observation observation = context.get(ObservationThreadLocalAccessor.KEY);
+                        try (Observation.Scope scope = observation.openScope()){
+                            logger.info("consider this log");
+                            return scope;
+                        }
+                    })
+```
 
 > Spring Boot also supports sending logs via OTLP to an OpenTelemetry-capable backend,   
 > but it doesn't install log appenders into Logback and Log4j2 out of the box.   
